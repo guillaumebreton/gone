@@ -2,6 +2,11 @@
 
 Gone is a simple pomodoro timer from cli for OSX and Linux
 
+# Installation
+
+see [release page](https://github.com/guillaumebreton/gone/releases) to get the
+right artifact
+
 # Usage
 ```
 Usage of ./gone:
