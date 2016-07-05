@@ -39,8 +39,8 @@ func main() {
 		for _, c := range pattern {
 			switch c {
 			case 'w':
-				confirm(writer, "Start a working session (%d min)? [y/n]", *w)
-				runtimer(writer, *w, "Working session : %s")
+				confirm(writer, "Start a work session (%d min)? [y/n]", *w)
+				runtimer(writer, *w, "Work session : %s")
 			case 's':
 				confirm(writer, "Take a short break (%d min)? [y/n]", *s)
 				runtimer(writer, *s, "Short break : %s")
