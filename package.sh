@@ -1,4 +1,5 @@
 #!/bin/bash
+
 OS="darwin linux"
 ARCH="amd64"
 
