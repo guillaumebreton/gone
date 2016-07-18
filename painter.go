@@ -7,14 +7,35 @@ import (
 	"sync"
 )
 
+type ColorMode struct {
+	Bg      termbox.Attribute
+	TimerFG termbox.Attribute
+	TextFG  termbox.Attribute
+}
+
 type Painter struct {
 	refreshMutex *sync.Mutex
 	state        *State
-	mode         string
+	mode         ColorMode
 	debug        bool
 }
 
-func NewPainter(state *State, mode string, debug bool) *Painter {
+func NewPainter(state *State, m string, debug bool) *Painter {
+	var mode ColorMode
+	if m == "light" {
+		println("LIIGGHTTTTT")
+		mode = ColorMode{
+			Bg:      termbox.ColorWhite,
+			TimerFG: termbox.ColorRed,
+			TextFG:  termbox.ColorBlack,
+		}
+	} else {
+		mode = ColorMode{
+			Bg:      termbox.ColorBlack,
+			TimerFG: termbox.ColorRed,
+			TextFG:  termbox.ColorWhite,
+		}
+	}
 	return &Painter{
 		state:        state,
 		mode:         mode,
@@ -55,7 +76,7 @@ func (p *Painter) vline(x int) {
 func (p *Painter) draw() {
 	p.refreshMutex.Lock()
 	s := p.state.Duration()
-	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+	termbox.Clear(p.mode.Bg, p.mode.Bg)
 	w, h := termbox.Size()
 	bannerWidth := p.width(s)
 	timerHeight := 5
@@ -94,7 +115,7 @@ func (p *Painter) drawMessage(x, y, w int, message string) {
 	}
 	ux := x
 	for _, c := range m {
-		termbox.SetCell(ux, y, c, termbox.ColorWhite, termbox.ColorBlack)
+		termbox.SetCell(ux, y, c, p.mode.TextFG, p.mode.Bg)
 		ux++
 	}
 }
@@ -119,7 +140,7 @@ func (p *Painter) drawChar(x, y int, c rune) (ux int, uy int) {
 		ux = x
 		for _, c := range l {
 			if c == '#' {
-				termbox.SetCell(ux, uy, ' ', termbox.ColorRed, termbox.ColorRed)
+				termbox.SetCell(ux, uy, ' ', p.mode.TimerFG, p.mode.TimerFG)
 			}
 			ux++
 		}
