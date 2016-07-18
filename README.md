@@ -1,7 +1,11 @@
 # Gone
 
-Gone is a simple pomodoro timer from cli for OSX and Linux. It can execute a
-command every time a session is done.
+Gone is a simple cli pomodoro timer for OSX and Linux. It can execute a
+command every time a session is done. Responsiveness inside (lel)
+
+
+![scrot](https://github.com/guillaumebreton/gone/raw/master/srot.png)
+
 
 # Installation
 
