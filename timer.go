@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// Timer count time and update the state accordingly.
 type Timer struct {
 	state   *State
 	command string
@@ -14,6 +15,8 @@ type Timer struct {
 	painter *Painter
 }
 
+// NewTimer create a new timer using a state, a command to execute
+// and a painter to draw the screnn
 func NewTimer(s *State, p *Painter, c string) *Timer {
 	return &Timer{
 		state:   s,
@@ -22,7 +25,7 @@ func NewTimer(s *State, p *Painter, c string) *Timer {
 	}
 }
 
-// runtimer launch a timer and write the counter using the writer
+// run launch a timer and write the counter using the writer
 func (t *Timer) run() {
 	//start a new timer
 	t.ticker = time.NewTicker(250 * time.Millisecond)
@@ -55,6 +58,7 @@ func (t *Timer) run() {
 	t.painter.draw()
 }
 
+// Stop the timer
 func (t *Timer) Stop() {
 	if t.ticker != nil {
 		t.ticker.Stop()

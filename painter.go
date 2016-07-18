@@ -7,12 +7,14 @@ import (
 	"sync"
 )
 
+// ColorMode defines the color scheme of a painter
 type ColorMode struct {
 	Bg      termbox.Attribute
 	TimerFG termbox.Attribute
 	TextFG  termbox.Attribute
 }
 
+// Painter draw a timer using termbox
 type Painter struct {
 	refreshMutex *sync.Mutex
 	state        *State
@@ -20,10 +22,10 @@ type Painter struct {
 	debug        bool
 }
 
+// NewPainter create a new painter based on a state, the color mode and the debug mode
 func NewPainter(state *State, m string, debug bool) *Painter {
 	var mode ColorMode
 	if m == "light" {
-		println("LIIGGHTTTTT")
 		mode = ColorMode{
 			Bg:      termbox.ColorWhite,
 			TimerFG: termbox.ColorRed,
@@ -44,6 +46,7 @@ func NewPainter(state *State, m string, debug bool) *Painter {
 	}
 }
 
+// Init the painter by initialising termbox
 func (p *Painter) Init() {
 	err := termbox.Init()
 	if err != nil {
@@ -51,6 +54,7 @@ func (p *Painter) Init() {
 	}
 }
 
+// Close the painter
 func (p *Painter) Close() {
 	termbox.Close()
 }
@@ -72,7 +76,8 @@ func (p *Painter) vline(x int) {
 
 }
 
-// draw the timer
+// draw the timer and the bottom message
+// if the debug mode is enabled also draw the debug mode
 func (p *Painter) draw() {
 	p.refreshMutex.Lock()
 	s := p.state.Duration()
@@ -107,6 +112,7 @@ func (p *Painter) width(s string) int {
 	return result - 1
 }
 
+// drawMessage a message using termbox
 func (p *Painter) drawMessage(x, y, w int, message string) {
 	padLeft := (w - len(message)) / 2
 	m := strings.ToUpper(message)
@@ -120,6 +126,7 @@ func (p *Painter) drawMessage(x, y, w int, message string) {
 	}
 }
 
+// drawTimer draw the timer duration using termbox
 func (p *Painter) drawTimer(x, y int, str string) (ux int, uy int) {
 	ux = x
 	uy = y

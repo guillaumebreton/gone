@@ -85,6 +85,7 @@ func handleKeyEvent() {
 	}
 }
 
+// exit kil the timer and destroy the painter
 func exit() {
 	timer.Stop()
 	painter.Close()

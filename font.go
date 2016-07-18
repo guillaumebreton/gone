@@ -87,6 +87,8 @@ var nine string = `
 .....#.
 ######.
 `
+
+// smallFont defines the font use to display the timer on termbox
 var smallFont = map[rune][][]rune{
 	':': asArray(colon),
 	'1': asArray(one),
@@ -101,6 +103,7 @@ var smallFont = map[rune][][]rune{
 	'0': asArray(zero),
 }
 
+// Convert a character as an array of rune
 func asArray(chars string) [][]rune {
 	result := [][]rune{}
 	line := []rune{}
