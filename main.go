@@ -51,6 +51,9 @@ func handleKeyEvent() {
 	for {
 		switch ev := termbox.PollEvent(); ev.Type {
 		case termbox.EventKey:
+			if ev.Key == termbox.KeyEsc {
+				exit()
+			}
 			switch ev.Ch {
 			case 'q':
 				exit()
