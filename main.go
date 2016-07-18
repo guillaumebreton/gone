@@ -13,7 +13,7 @@ var s = flag.Int("s", 5, "Duration of a short break")
 var l = flag.Int("l", 15, "Duration of a long break")
 var p = flag.String("p", "wswswl", "Pattern to  follow (for example wswswl)")
 var e = flag.String("e", "", "The command to execute when a session is done")
-var m = flag.String("m", "dark", "Select the color mode")
+var m = flag.String("m", "dark", "Select the color mode (light or dark)")
 var d = flag.Bool("debug", false, "Debug option for development purpose")
 
 var wg sync.WaitGroup
