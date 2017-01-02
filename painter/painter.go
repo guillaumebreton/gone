@@ -1,7 +1,8 @@
-package main
+package painter
 
 import (
 	"fmt"
+	"github.com/guillaumebreton/gone/state"
 	"github.com/nsf/termbox-go"
 	"strings"
 	"sync"
@@ -17,13 +18,13 @@ type ColorMode struct {
 // Painter draw a timer using termbox
 type Painter struct {
 	refreshMutex *sync.Mutex
-	state        *State
+	state        *state.State
 	mode         ColorMode
 	debug        bool
 }
 
 // NewPainter create a new painter based on a state, the color mode and the debug mode
-func NewPainter(state *State, m string, debug bool) *Painter {
+func NewPainter(state *state.State, m string, debug bool) *Painter {
 	var mode ColorMode
 	if m == "light" {
 		mode = ColorMode{
@@ -78,7 +79,7 @@ func (p *Painter) vline(x int) {
 
 // draw the timer and the bottom message
 // if the debug mode is enabled also draw the debug mode
-func (p *Painter) draw() {
+func (p *Painter) Draw() {
 	p.refreshMutex.Lock()
 	s := p.state.Duration()
 	termbox.Clear(p.mode.Bg, p.mode.Bg)
@@ -93,7 +94,7 @@ func (p *Painter) draw() {
 		p.vline(w / 2)
 	}
 	p.drawTimer(px, py, s)
-	p.drawMessage(px, py+timerHeight+1, bannerWidth, state.Message())
+	p.drawMessage(px, py+timerHeight+1, bannerWidth, p.state.Message())
 	termbox.Flush()
 	p.refreshMutex.Unlock()
 }

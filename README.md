@@ -1,4 +1,4 @@
-# Gone
+# Gone [![Powered By: GoReleaser](https://img.shields.io/badge/powered%20by-goreleaser-green.svg?style=flat-square)](https://github.com/goreleaser)
 
 Gone is a simple cli pomodoro timer for OSX and Linux. It can execute a
 command every time a session is done. Responsiveness inside (lel)
@@ -37,4 +37,13 @@ Usage of ./bin/gone:
 
 ```
 ./gone -w 25 -l 30 -s 5 -e "say done"
+```
+
+# Release the application
+
+- Install https://github.com/goreleaser/releaser
+- Install https://github.com/aktau/github-release
+- Execute:
+```
+  release
 ```

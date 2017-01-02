@@ -1,6 +1,19 @@
 {
 	"comment": "",
 	"ignore": "test",
-	"package": [],
-	"rootPath": "github.com/guillaumebreton/gone"
+	"package": [
+		{
+			"checksumSHA1": "yf185lmVPcvXjLZuPT1s4JzxI18=",
+			"path": "github.com/mattn/go-runewidth",
+			"revision": "737072b4e32b7a5018b4a7125da8d12de90e8045",
+			"revisionTime": "2016-10-12T01:35:12Z"
+		},
+		{
+			"checksumSHA1": "pcxo5ATo/IV/Co8/F4RmBTL+mQs=",
+			"path": "github.com/nsf/termbox-go",
+			"revision": "abe82ce5fb7a42fbd6784a5ceb71aff977e09ed8",
+			"revisionTime": "2016-12-05T19:42:51Z"
+		}
+	],
+	"rootPath": "github.com/guillaume.breton/gone"
 }

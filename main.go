@@ -3,6 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/guillaumebreton/gone/painter"
+	"github.com/guillaumebreton/gone/state"
+	"github.com/guillaumebreton/gone/util"
 	"github.com/nsf/termbox-go"
 	"os"
 	"sync"
@@ -18,9 +21,9 @@ var d = flag.Bool("debug", false, "Debug option for development purpose")
 
 var wg sync.WaitGroup
 
-var state *State
-var painter *Painter
-var timer *Timer
+var currentState *state.State
+var currentPainter *painter.Painter
+var currentTimer *util.Timer
 
 func main() {
 	flag.Parse()
@@ -34,12 +37,12 @@ func main() {
 			os.Exit(2)
 		}
 	}
-	state = NewState(*p, *w, *s, *l)
-	painter = NewPainter(state, *m, *d)
-	painter.Init()
-	timer = NewTimer(state, painter, *e)
+	currentState = state.NewState(*p, *w, *s, *l)
+	currentPainter = painter.NewPainter(currentState, *m, *d)
+	currentPainter.Init()
+	currentTimer = util.NewTimer(currentState, currentPainter, *e)
 	go handleKeyEvent()
-	go timer.run()
+	go currentTimer.Run()
 	wg.Add(1)
 	wg.Wait()
 	os.Exit(1)
@@ -58,27 +61,27 @@ func handleKeyEvent() {
 			case 'q':
 				exit()
 			case 'p':
-				if state.IsRunning() {
-					state.Pause()
+				if currentState.IsRunning() {
+					currentState.Pause()
 				} else {
-					state.Resume()
+					currentState.Resume()
 				}
-				painter.draw()
+				currentPainter.Draw()
 			case 'y':
-				if state.IsWaiting() {
-					state.Resume()
+				if currentState.IsWaiting() {
+					currentState.Resume()
 				}
 			case 'Y':
-				if state.IsWaiting() {
-					state.Resume()
+				if currentState.IsWaiting() {
+					currentState.Resume()
 				}
 			default:
-				if state.IsWaiting() {
+				if currentState.IsWaiting() {
 					exit()
 				}
 			}
 		case termbox.EventResize:
-			painter.draw()
+			currentPainter.Draw()
 		case termbox.EventError:
 			panic(ev.Err)
 		}
@@ -87,7 +90,7 @@ func handleKeyEvent() {
 
 // exit kil the timer and destroy the painter
 func exit() {
-	timer.Stop()
-	painter.Close()
+	currentTimer.Stop()
+	currentPainter.Close()
 	wg.Done()
 }
