@@ -1,0 +1,13 @@
+repo: guillaumebreton/gone
+binary_name: gone
+build:
+  arches:
+    - amd64
+    - 386
+  oses:
+    - darwin
+    - linux
+
+files:
+  - LICENSE.txt
+  - README.md
