@@ -1,5 +1,3 @@
-release:
-  repo: guillaumebreton/gone
 build:
   binary_name: gone
   goarch:
@@ -12,3 +10,7 @@ archive:
   files:
     - LICENSE.txt
     - README.md
+release:
+  repo: guillaumebreton/gone
+brew:
+  repo: guillaumebreton/gone
