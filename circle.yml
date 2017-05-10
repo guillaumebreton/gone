@@ -1,6 +1,6 @@
 deployment:
-  tag:
-    tag: /v[0-9]+(\.[0-9]+)*(-.*)*/
-    owner: user
+  release:
+    tag: /[0-9]+(\.[0-9]+)*/
+    owner: guillaumebreton
     commands:
       - curl -sL https://git.io/goreleaser | bash
