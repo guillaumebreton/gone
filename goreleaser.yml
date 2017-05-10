@@ -1,5 +1,5 @@
 build:
-  binary_name: gone
+  binary: gone
   goarch:
     - amd64
     - 386
@@ -11,6 +11,10 @@ archive:
     - LICENSE.txt
     - README.md
 release:
-  repo: guillaumebreton/gone
+  github: 
+    owner: guillaumebreton
+    name: gone
 brew:
-  repo: guillaumebreton/gone
+  github: 
+    owner: guillaumebreton
+    name: gone
