@@ -1,5 +1,6 @@
 deployment:
-  release:
-    branch: master
+  tag:
+    tag: /v[0-9]+(\.[0-9]+)*(-.*)*/
+    owner: user
     commands:
-      - curl -s https://raw.githubusercontent.com/goreleaser/get/master/latest | bash
+      - curl -sL https://git.io/goreleaser | bash
