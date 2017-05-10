@@ -9,11 +9,11 @@
 			"revisionTime": "2016-10-12T01:35:12Z"
 		},
 		{
-			"checksumSHA1": "pcxo5ATo/IV/Co8/F4RmBTL+mQs=",
+			"checksumSHA1": "jJHL8hQUvS2iF4ukTJe/ImagtwQ=",
 			"path": "github.com/nsf/termbox-go",
 			"revision": "abe82ce5fb7a42fbd6784a5ceb71aff977e09ed8",
 			"revisionTime": "2016-12-05T19:42:51Z"
 		}
 	],
-	"rootPath": "github.com/guillaume.breton/gone"
+	"rootPath": "github.com/guillaumebreton/gone"
 }

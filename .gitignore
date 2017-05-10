@@ -25,4 +25,3 @@ _testmain.go
 
 bin/
 dist/
-vendor/*/

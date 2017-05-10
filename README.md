@@ -41,6 +41,7 @@ Usage of ./bin/gone:
 
 # Release the application
 
+- Install govendor
 - Install https://github.com/goreleaser/releaser
 - Install https://github.com/aktau/github-release
 - Execute:
