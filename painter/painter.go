@@ -24,40 +24,47 @@ type Painter struct {
 }
 
 // NewPainter create a new painter based on a state, the color mode and the debug mode
-func NewPainter(state *state.State, m string, debug bool, fontColor string) *Painter {
+func NewPainter(state *state.State, m string, debug bool, fg string) *Painter {
 	var mode ColorMode
 	var bg termbox.Attribute
 	var timerFg termbox.Attribute
+	var textFg termbox.Attribute
 
-	if m == "light" {
-		bg = termbox.ColorWhite
-	} else {
-		bg = termbox.ColorBlack
+	colors := map[string]termbox.Attribute{
+		"black":   termbox.ColorBlack,
+		"blue":    termbox.ColorBlue,
+		"cyan":    termbox.ColorCyan,
+		"green":   termbox.ColorGreen,
+		"magenta": termbox.ColorMagenta,
+		"red":     termbox.ColorRed,
+		"white":   termbox.ColorWhite,
+		"yellow":  termbox.ColorYellow,
 	}
 
-	switch strings.ToLower(fontColor) {
-	case "black":
-		timerFg = termbox.ColorBlack
-	case "blue":
-		timerFg = termbox.ColorBlue
-	case "cyan":
-		timerFg = termbox.ColorCyan
-	case "green":
-		timerFg = termbox.ColorGreen
-	case "magenta":
-		timerFg = termbox.ColorMagenta
-	case "red":
-		timerFg = termbox.ColorRed
-	case "white":
-		timerFg = termbox.ColorWhite
-	case "yellow":
-		timerFg = termbox.ColorYellow
+	if m == "light" {
+		bg = colors["white"]
+		textFg = colors["black"]
+	} else {
+		bg = colors["black"]
+		textFg = colors["white"]
+	}
+	timerFg = textFg
+
+	// TODO
+	// See https://github.com/nsf/termbox-go/blob/8c5e0793e04afcda7fe23d0751791e7321df4265/api_common.go#L133
+	// Basically, it'd be nice if we could allow something like:
+	// gone -fg blue,green # produces cyan
+	// As well as customing background with -bg
+	// instead of 'light' and 'dark' modes
+	if fg != "" {
+		timerFg = colors[fg]
+		textFg = timerFg
 	}
 
 	mode = ColorMode{
 		Bg:      bg,
 		TimerFG: timerFg,
-		TextFG:  termbox.ColorWhite,
+		TextFG:  textFg,
 	}
 	return &Painter{
 		state:        state,
