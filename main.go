@@ -14,6 +14,7 @@ import (
 var w = flag.Int("w", 25, "Duration of a working session")
 var s = flag.Int("s", 5, "Duration of a short break")
 var l = flag.Int("l", 15, "Duration of a long break")
+var c = flag.String("c", "white", "Color of font to display")
 var p = flag.String("p", "wswswl", "Pattern to  follow (for example wswswl)")
 var e = flag.String("e", "", "The command to execute when a session is done")
 var m = flag.String("m", "dark", "Select the color mode (light or dark)")
@@ -38,7 +39,7 @@ func main() {
 		}
 	}
 	currentState = state.NewState(*p, *w, *s, *l)
-	currentPainter = painter.NewPainter(currentState, *m, *d)
+	currentPainter = painter.NewPainter(currentState, *m, *d, *c)
 	currentPainter.Init()
 	currentTimer = util.NewTimer(currentState, currentPainter, *e)
 	go handleKeyEvent()
