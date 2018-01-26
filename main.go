@@ -14,11 +14,11 @@ import (
 var w = flag.Int("w", 25, "Duration of a working session")
 var s = flag.Int("s", 5, "Duration of a short break")
 var l = flag.Int("l", 15, "Duration of a long break")
-var fg = flag.String("fg", "", "Color of font to display")
 var p = flag.String("p", "wswswl", "Pattern to  follow (for example wswswl)")
 var e = flag.String("e", "", "The command to execute when a session is done")
 var m = flag.String("m", "dark", "Select the color mode (light or dark)")
 var d = flag.Bool("debug", false, "Debug option for development purpose")
+var fg = flag.String("fg", "", "Single or comma separated list of color names for font")
 
 var wg sync.WaitGroup
 
@@ -37,6 +37,11 @@ func main() {
 			fmt.Printf("Invalid pattern ''%s', should contain only w,s, or l\n", *p)
 			os.Exit(2)
 		}
+	}
+	// termbox.ColorDefault is never a valid color.
+	if *fg != "" && painter.Colors[*fg] == termbox.ColorDefault {
+		fmt.Printf("Invalid foreground color specified, please state one or a comma separated list of black, blue, cyan, green, magenta, red, white, or yellow\n")
+		os.Exit(2)
 	}
 	currentState = state.NewState(*p, *w, *s, *l)
 	currentPainter = painter.NewPainter(currentState, *m, *d, *fg)

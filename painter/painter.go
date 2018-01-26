@@ -23,6 +23,17 @@ type Painter struct {
 	debug        bool
 }
 
+var Colors = map[string]termbox.Attribute{
+	"black":   termbox.ColorBlack,
+	"blue":    termbox.ColorBlue,
+	"cyan":    termbox.ColorCyan,
+	"green":   termbox.ColorGreen,
+	"magenta": termbox.ColorMagenta,
+	"red":     termbox.ColorRed,
+	"white":   termbox.ColorWhite,
+	"yellow":  termbox.ColorYellow,
+}
+
 // NewPainter create a new painter based on a state, the color mode and the debug mode
 func NewPainter(state *state.State, m string, debug bool, fg string) *Painter {
 	var mode ColorMode
@@ -30,34 +41,17 @@ func NewPainter(state *state.State, m string, debug bool, fg string) *Painter {
 	var timerFg termbox.Attribute
 	var textFg termbox.Attribute
 
-	colors := map[string]termbox.Attribute{
-		"black":   termbox.ColorBlack,
-		"blue":    termbox.ColorBlue,
-		"cyan":    termbox.ColorCyan,
-		"green":   termbox.ColorGreen,
-		"magenta": termbox.ColorMagenta,
-		"red":     termbox.ColorRed,
-		"white":   termbox.ColorWhite,
-		"yellow":  termbox.ColorYellow,
-	}
-
 	if m == "light" {
-		bg = colors["white"]
-		textFg = colors["black"]
+		bg = Colors["white"]
+		textFg = Colors["black"]
 	} else {
-		bg = colors["black"]
-		textFg = colors["white"]
+		bg = Colors["black"]
+		textFg = Colors["white"]
 	}
 	timerFg = textFg
 
-	// TODO
-	// See https://github.com/nsf/termbox-go/blob/8c5e0793e04afcda7fe23d0751791e7321df4265/api_common.go#L133
-	// Basically, it'd be nice if we could allow something like:
-	// gone -fg blue,green # produces cyan
-	// As well as customing background with -bg
-	// instead of 'light' and 'dark' modes
 	if fg != "" {
-		timerFg = colors[fg]
+		timerFg = Colors[fg]
 		textFg = timerFg
 	}
 
