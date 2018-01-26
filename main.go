@@ -40,12 +40,8 @@ func main() {
 		}
 	}
 	// termbox.ColorDefault is never a valid color.
-	if *fg != "" && painter.Colors[*fg] == termbox.ColorDefault {
-		fmt.Printf("Invalid foreground color specified, please state one or a comma separated list of black, blue, cyan, green, magenta, red, white, or yellow\n")
-		os.Exit(2)
-	}
-	if *bg != "" && painter.Colors[*bg] == termbox.ColorDefault {
-		fmt.Printf("Invalid background color specified, please state one or a comma separated list of black, blue, cyan, green, magenta, red, white, or yellow\n")
+	if (*fg != "" && painter.Colors[*fg] == termbox.ColorDefault) || (*bg != "" && painter.Colors[*bg] == termbox.ColorDefault) {
+		fmt.Printf("Invalid background color specified, please state one of black, blue, cyan, green, magenta, red, white, or yellow\n")
 		os.Exit(2)
 	}
 	currentState = state.NewState(*p, *w, *s, *l)
