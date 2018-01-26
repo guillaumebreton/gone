@@ -18,7 +18,7 @@ var p = flag.String("p", "wswswl", "Pattern to  follow (for example wswswl)")
 var e = flag.String("e", "", "The command to execute when a session is done")
 var m = flag.String("m", "dark", "Select the color mode (light or dark)")
 var d = flag.Bool("debug", false, "Debug option for development purpose")
-var fg = flag.String("fg", "", "Single or comma separated list of color names for font")
+var fg = flag.String("fg", "", "Custom color for font")
 
 var wg sync.WaitGroup
 
