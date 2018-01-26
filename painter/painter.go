@@ -35,28 +35,32 @@ var Colors = map[string]termbox.Attribute{
 }
 
 // NewPainter create a new painter based on a state, the color mode and the debug mode
-func NewPainter(state *state.State, m string, debug bool, fg string) *Painter {
+func NewPainter(state *state.State, m string, debug bool, fg string, bg string) *Painter {
 	var mode ColorMode
-	var bg termbox.Attribute
+	var timerBg termbox.Attribute
 	var timerFg termbox.Attribute
 	var textFg termbox.Attribute
 
 	if m == "light" {
-		bg = Colors["white"]
-		textFg = Colors["black"]
+		timerBg = Colors["white"]
+		textFg = Colors["red"]
 	} else {
-		bg = Colors["black"]
-		textFg = Colors["white"]
+		timerBg = Colors["black"]
+		textFg = Colors["red"]
 	}
+
 	timerFg = textFg
 
 	if fg != "" {
 		timerFg = Colors[fg]
 		textFg = timerFg
 	}
+	if bg != "" {
+		timerBg = Colors[bg]
+	}
 
 	mode = ColorMode{
-		Bg:      bg,
+		Bg:      timerBg,
 		TimerFG: timerFg,
 		TextFG:  textFg,
 	}
