@@ -23,21 +23,46 @@ type Painter struct {
 	debug        bool
 }
 
+var Colors = map[string]termbox.Attribute{
+	"black":   termbox.ColorBlack,
+	"blue":    termbox.ColorBlue,
+	"cyan":    termbox.ColorCyan,
+	"green":   termbox.ColorGreen,
+	"magenta": termbox.ColorMagenta,
+	"red":     termbox.ColorRed,
+	"white":   termbox.ColorWhite,
+	"yellow":  termbox.ColorYellow,
+}
+
 // NewPainter create a new painter based on a state, the color mode and the debug mode
-func NewPainter(state *state.State, m string, debug bool) *Painter {
+func NewPainter(state *state.State, m string, debug bool, fg string, bg string) *Painter {
 	var mode ColorMode
+	var timerBg termbox.Attribute
+	var timerFg termbox.Attribute
+	var textFg termbox.Attribute
+
 	if m == "light" {
-		mode = ColorMode{
-			Bg:      termbox.ColorWhite,
-			TimerFG: termbox.ColorRed,
-			TextFG:  termbox.ColorBlack,
-		}
+		timerBg = Colors["white"]
+		textFg = Colors["red"]
 	} else {
-		mode = ColorMode{
-			Bg:      termbox.ColorBlack,
-			TimerFG: termbox.ColorRed,
-			TextFG:  termbox.ColorWhite,
-		}
+		timerBg = Colors["black"]
+		textFg = Colors["red"]
+	}
+
+	timerFg = textFg
+
+	if fg != "" {
+		timerFg = Colors[strings.ToLower(fg)]
+		textFg = timerFg
+	}
+	if bg != "" {
+		timerBg = Colors[strings.ToLower(bg)]
+	}
+
+	mode = ColorMode{
+		Bg:      timerBg,
+		TimerFG: timerFg,
+		TextFG:  textFg,
 	}
 	return &Painter{
 		state:        state,

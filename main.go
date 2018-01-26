@@ -18,6 +18,8 @@ var p = flag.String("p", "wswswl", "Pattern to  follow (for example wswswl)")
 var e = flag.String("e", "", "The command to execute when a session is done")
 var m = flag.String("m", "dark", "Select the color mode (light or dark)")
 var d = flag.Bool("debug", false, "Debug option for development purpose")
+var fg = flag.String("fg", "", "Custom foreground color")
+var bg = flag.String("bg", "", "Custom background color")
 
 var wg sync.WaitGroup
 
@@ -37,8 +39,13 @@ func main() {
 			os.Exit(2)
 		}
 	}
+	// termbox.ColorDefault is never a valid color.
+	if (*fg != "" && painter.Colors[*fg] == termbox.ColorDefault) || (*bg != "" && painter.Colors[*bg] == termbox.ColorDefault) {
+		fmt.Printf("Invalid background color specified, please state one of black, blue, cyan, green, magenta, red, white, or yellow\n")
+		os.Exit(2)
+	}
 	currentState = state.NewState(*p, *w, *s, *l)
-	currentPainter = painter.NewPainter(currentState, *m, *d)
+	currentPainter = painter.NewPainter(currentState, *m, *d, *fg, *bg)
 	currentPainter.Init()
 	currentTimer = util.NewTimer(currentState, currentPainter, *e)
 	go handleKeyEvent()
