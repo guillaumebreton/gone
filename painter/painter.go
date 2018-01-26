@@ -52,11 +52,11 @@ func NewPainter(state *state.State, m string, debug bool, fg string, bg string) 
 	timerFg = textFg
 
 	if fg != "" {
-		timerFg = Colors[fg]
+		timerFg = Colors[strings.ToLower(fg)]
 		textFg = timerFg
 	}
 	if bg != "" {
-		timerBg = Colors[bg]
+		timerBg = Colors[strings.ToLower(bg)]
 	}
 
 	mode = ColorMode{
