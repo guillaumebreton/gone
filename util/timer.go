@@ -2,32 +2,35 @@ package util
 
 import (
 	"fmt"
-	"github.com/guillaumebreton/gone/painter"
-	"github.com/guillaumebreton/gone/state"
 	"os/exec"
 	"strings"
 	"time"
+
+	"github.com/guillaumebreton/gone/painter"
+	"github.com/guillaumebreton/gone/state"
 )
 
 // Timer count time and update the state accordingly.
 type Timer struct {
-	state   *state.State
-	command string
-	ticker  *time.Ticker
-	painter *painter.Painter
+	state    *state.State
+	command  string
+	ticker   *time.Ticker
+	painter  *painter.Painter
+	notifier Notifier
 }
 
 // NewTimer create a new timer using a state, a command to execute
-// and a painter to draw the screnn
-func NewTimer(s *state.State, p *painter.Painter, c string) *Timer {
+// and a painter to draw the screen.
+func NewTimer(s *state.State, p *painter.Painter, c string, n Notifier) *Timer {
 	return &Timer{
-		state:   s,
-		painter: p,
-		command: c,
+		state:    s,
+		painter:  p,
+		command:  c,
+		notifier: n,
 	}
 }
 
-// run launch a timer and write the counter using the writer
+// Run launch a timer and write the counter using the writer.
 func (t *Timer) Run() {
 	//start a new timer
 	t.ticker = time.NewTicker(250 * time.Millisecond)
@@ -38,13 +41,12 @@ func (t *Timer) Run() {
 			i = 1
 			t.state.Decrease()
 			if t.state.IsEnded() {
+				t.notifier.Notify("Pomodoro", t.state.StatusMessage())
 				break
 			}
-		} else {
-
-			i++
+			continue
 		}
-
+		i++
 	}
 	t.ticker.Stop()
 	if t.command != "" {
@@ -59,7 +61,7 @@ func (t *Timer) Run() {
 	t.painter.Draw()
 }
 
-// Stop the timer
+// Stop the timer.
 func (t *Timer) Stop() {
 	if t.ticker != nil {
 		t.ticker.Stop()

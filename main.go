@@ -3,12 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+	"sync"
+
 	"github.com/guillaumebreton/gone/painter"
 	"github.com/guillaumebreton/gone/state"
 	"github.com/guillaumebreton/gone/util"
 	"github.com/nsf/termbox-go"
-	"os"
-	"sync"
 )
 
 var w = flag.Int("w", 25, "Duration of a working session")
@@ -17,6 +18,7 @@ var l = flag.Int("l", 15, "Duration of a long break")
 var p = flag.String("p", "wswswl", "Pattern to  follow (for example wswswl)")
 var e = flag.String("e", "", "The command to execute when a session is done")
 var m = flag.String("m", "dark", "Select the color mode (light or dark)")
+var n = flag.Bool("n", false, "Enable desktop notifications")
 var d = flag.Bool("debug", false, "Debug option for development purpose")
 
 var wg sync.WaitGroup
@@ -37,10 +39,16 @@ func main() {
 			os.Exit(2)
 		}
 	}
+
+	notifier := util.NewNullNotifier()
+	if *n {
+		notifier = util.NewDesktopNotifier()
+	}
+
 	currentState = state.NewState(*p, *w, *s, *l)
 	currentPainter = painter.NewPainter(currentState, *m, *d)
 	currentPainter.Init()
-	currentTimer = util.NewTimer(currentState, currentPainter, *e)
+	currentTimer = util.NewTimer(currentState, currentPainter, *e, notifier)
 	go handleKeyEvent()
 	go currentTimer.Run()
 	wg.Add(1)
@@ -49,7 +57,7 @@ func main() {
 
 }
 
-// handleKeyEvent handles keys on event
+// handleKeyEvent handles keys on event.
 func handleKeyEvent() {
 	for {
 		switch ev := termbox.PollEvent(); ev.Type {
@@ -88,7 +96,7 @@ func handleKeyEvent() {
 	}
 }
 
-// exit kil the timer and destroy the painter
+// exit kill the timer and destroy the painter.
 func exit() {
 	currentTimer.Stop()
 	currentPainter.Close()
