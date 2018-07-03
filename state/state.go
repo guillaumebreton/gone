@@ -107,11 +107,24 @@ func (s *State) StatusMessage() string {
 		'l': "long break",
 	}
 
-	if !s.IsEnded() {
-		return fmt.Sprintf("A %s is in progress", msgs[s.pattern[s.currentIdx]])
+	if len(s.pattern) <= s.currentIdx {
+		return "Gone encountered an unknown state"
 	}
 
-	return fmt.Sprintf("Your %s has ended, time for a %s.", msgs[s.pattern[s.currentIdx]], msgs[s.pattern[s.currentIdx+1]])
+	currentState := msgs[s.pattern[s.currentIdx]]
+
+	if !s.IsEnded() {
+		return fmt.Sprintf("A %s is in progress", currentState)
+	}
+
+	nextState := msgs[s.pattern[0]] // Fallback for error handling.
+
+	// Set next pattern unless it overflows.
+	if s.currentIdx != len(s.pattern)-1 {
+		nextState = msgs[s.pattern[s.currentIdx+1]]
+	}
+
+	return fmt.Sprintf("Your %s has ended, time for a %s.", currentState, nextState)
 }
 
 // Duration format a duration to 12:34 (mm:ss).
