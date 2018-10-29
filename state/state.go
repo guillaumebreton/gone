@@ -99,7 +99,35 @@ func (s *State) Message() string {
 	return "paused"
 }
 
-// formatDuration format a duration to 12:34
+// StatusMessage returns a message describing the state of a session.
+func (s *State) StatusMessage() string {
+	msgs := map[byte]string{
+		'w': "working session",
+		's': "short break",
+		'l': "long break",
+	}
+
+	if len(s.pattern) <= s.currentIdx {
+		return "Gone encountered an unknown state"
+	}
+
+	currentState := msgs[s.pattern[s.currentIdx]]
+
+	if !s.IsEnded() {
+		return fmt.Sprintf("A %s is in progress", currentState)
+	}
+
+	nextState := msgs[s.pattern[0]] // Fallback for error handling.
+
+	// Set next pattern unless it overflows.
+	if s.currentIdx != len(s.pattern)-1 {
+		nextState = msgs[s.pattern[s.currentIdx+1]]
+	}
+
+	return fmt.Sprintf("Your %s has ended, time for a %s.", currentState, nextState)
+}
+
+// Duration format a duration to 12:34 (mm:ss).
 func (s *State) Duration() string {
 	seconds := s.duration % 60
 	minutes := s.duration / 60
