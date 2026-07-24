@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"os/exec"
+	"runtime"
 	"strings"
 	"time"
 
@@ -17,17 +18,36 @@ type Timer struct {
 	ticker   *time.Ticker
 	painter  *painter.Painter
 	notifier Notifier
+	sound    string
 }
 
-// NewTimer create a new timer using a state, a command to execute
-// and a painter to draw the screen.
-func NewTimer(s *state.State, p *painter.Painter, c string, n Notifier) *Timer {
+// NewTimer create a new timer using a state, a command to execute,
+// a painter to draw the screen and an optional sound file played on
+// session end.
+func NewTimer(s *state.State, p *painter.Painter, c string, n Notifier, sound string) *Timer {
 	return &Timer{
 		state:    s,
 		painter:  p,
 		command:  c,
 		notifier: n,
+		sound:    sound,
 	}
+}
+
+// playSound plays the configured sound file in the background. It is a
+// no-op when no file is set. Uses afplay on macOS and paplay elsewhere.
+func playSound(file string) {
+	if file == "" {
+		return
+	}
+	var cmd *exec.Cmd
+	switch runtime.GOOS {
+	case "darwin":
+		cmd = exec.Command("afplay", file)
+	default:
+		cmd = exec.Command("paplay", file)
+	}
+	cmd.Start()
 }
 
 // Run launch a timer and write the counter using the writer.
@@ -42,6 +62,7 @@ func (t *Timer) Run() {
 			t.state.Decrease()
 			if t.state.IsEnded() {
 				t.notifier.Notify("Pomodoro", t.state.StatusMessage())
+				playSound(t.sound)
 				break
 			}
 			continue

@@ -18,7 +18,9 @@ var l = flag.Int("l", 15, "Duration of a long break")
 var p = flag.String("p", "wswswl", "Pattern to  follow (for example wswswl)")
 var e = flag.String("e", "", "The command to execute when a session is done")
 var m = flag.String("m", "dark", "Select the color mode (light or dark)")
+var timer = flag.String("timer", "red", "Timer digit color (black, red, green, yellow, blue, magenta, cyan, white)")
 var n = flag.Bool("n", false, "Enable desktop notifications")
+var sound = flag.String("sound", "", "Path to a sound file played when a session ends")
 var d = flag.Bool("debug", false, "Debug option for development purpose")
 
 var wg sync.WaitGroup
@@ -46,9 +48,9 @@ func main() {
 	}
 
 	currentState = state.NewState(*p, *w, *s, *l)
-	currentPainter = painter.NewPainter(currentState, *m, *d)
+	currentPainter = painter.NewPainter(currentState, *m, *timer, *d)
 	currentPainter.Init()
-	currentTimer = util.NewTimer(currentState, currentPainter, *e, notifier)
+	currentTimer = util.NewTimer(currentState, currentPainter, *e, notifier, *sound)
 	go handleKeyEvent()
 	go currentTimer.Run()
 	wg.Add(1)
@@ -62,12 +64,13 @@ func handleKeyEvent() {
 	for {
 		switch ev := termbox.PollEvent(); ev.Type {
 		case termbox.EventKey:
+			// Esc is the only way to exit, to avoid quitting a session
+			// by mistake with a stray key press.
 			if ev.Key == termbox.KeyEsc {
 				exit()
+				break
 			}
 			switch ev.Ch {
-			case 'q':
-				exit()
 			case 'p':
 				if currentState.IsRunning() {
 					currentState.Pause()
@@ -75,17 +78,9 @@ func handleKeyEvent() {
 					currentState.Resume()
 				}
 				currentPainter.Draw()
-			case 'y':
+			case 'y', 'Y':
 				if currentState.IsWaiting() {
 					currentState.Resume()
-				}
-			case 'Y':
-				if currentState.IsWaiting() {
-					currentState.Resume()
-				}
-			default:
-				if currentState.IsWaiting() {
-					exit()
 				}
 			}
 		case termbox.EventResize:

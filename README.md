@@ -13,7 +13,9 @@ see [release page](https://github.com/guillaumebreton/gone/releases) to get the
 right artifact and put it in your path :)
 
 # Usage
-Run gone and Use ```q``` to quit, ```p``` to pause.
+Run gone. Press ```Esc``` to quit, ```p``` to pause. During a session
+only ```Esc``` exits, so a stray key press will not stop the timer by
+mistake. When a session ends, press ```y``` to continue to the next one.
 
 ```
 Usage of ./bin/gone:
@@ -27,8 +29,13 @@ Usage of ./bin/gone:
         Select the color mode (default "dark")
   -p string
         Pattern to  follow (for example wswswl) (default "wswswl")
+  -n    Enable desktop notifications
   -s int
         Duration of a short break (default 5)
+  -sound string
+        Path to a sound file played when a session ends
+  -timer string
+        Timer digit color: black, red, green, yellow, blue, magenta, cyan, white (default "red")
   -w int
         Duration of a working session (default 25)
 ```

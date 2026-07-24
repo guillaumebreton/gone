@@ -456,6 +456,18 @@ func extract_event(inbuf []byte, event *Event) bool {
 		// it's not escape sequence, then it's Alt or Esc, check input_mode
 		switch {
 		case input_mode&InputEsc != 0:
+			// An ESC followed by '[' (CSI) or 'O' (SS3) is an unrecognized
+			// special-key sequence (Menu, Pause, etc). Do not misfire a
+			// KeyEsc for its leading ESC byte: consume just that byte and
+			// let the trailing bytes fall through as ignorable characters.
+			// A lone ESC (the physical Esc key) still fills a KeyEsc event.
+			if len(inbuf) >= 2 && (inbuf[1] == '[' || inbuf[1] == 'O') {
+				event.Ch = 0
+				event.Key = 0
+				event.Mod = 0
+				event.N = 1
+				return true
+			}
 			// if we're in escape mode, fill Esc event, pop buffer, return success
 			event.Ch = 0
 			event.Key = KeyEsc
