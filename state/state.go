@@ -94,7 +94,7 @@ func (s *State) Message() string {
 			return "Continue? (y/n)"
 		}
 	} else if s.currentState == WAITING {
-		return "continue? [y/n]"
+		return "press y to continue, Esc to quit"
 	}
 	return "paused"
 }
