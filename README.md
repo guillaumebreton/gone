@@ -46,12 +46,22 @@ Usage of ./bin/gone:
 ./gone -w 25 -l 30 -s 5 -e "say done"
 ```
 
+# Development
+
+Gone requires a supported Go toolchain.
+
+```
+go test ./...
+make build
+```
+
 # Release the application
 
-- Install govendor
-- Install https://github.com/goreleaser/releaser
-- Install https://github.com/aktau/github-release
-- Execute:
+Maintainers publish a release by pushing an annotated `vX.Y.Z` tag. GitHub
+Actions builds the Darwin and Linux archives and publishes them with checksums
+on the [release page](https://github.com/guillaumebreton/gone/releases).
+
 ```
-  release
+git tag -a vX.Y.Z -m "vX.Y.Z"
+git push origin vX.Y.Z
 ```
