@@ -1,20 +1,24 @@
-build:
-  binary: gone
-  goarch:
-    - amd64
-    - 386
-  goos:
-    - darwin
-    - linux
-archive:
-  files:
-    - LICENSE.txt
-    - README.md
-release:
-  github: 
-    owner: guillaumebreton
-    name: gone
-brew:
-  github: 
-    owner: guillaumebreton
-    name: gone
+version: 2
+project_name: gone
+
+builds:
+  - binary: gone
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - files:
+      - LICENSE.txt
+      - README.md
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
